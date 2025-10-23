@@ -3,10 +3,12 @@
 $base_url = '/_Tekkomdik/PressApp/sistem/';
 $current_uri = $_SERVER['REQUEST_URI'];
 
-// Fungsi sederhana untuk mengecek menu aktif
-function is_active($uri_segment) {
+// Fungsi sederhana dan akurat untuk mengecek menu aktif
+function is_active($menu_path)
+{
     global $current_uri;
-    return strpos($current_uri, $uri_segment) !== false ? 'active' : '';
+    // Cek apakah URI saat ini mengandung path menu yang diberikan
+    return strpos($current_uri, $menu_path) !== false ? 'active' : '';
 }
 ?>
 <aside class="sidebar">
@@ -20,20 +22,20 @@ function is_active($uri_segment) {
         <li class="<?= is_active('manajemen_karyawan'); ?>">
             <a href="<?= $base_url ?>manajemen_karyawan/data_karyawan.php"><i class="fa-solid fa-users"></i> Data Karyawan</a>
         </li>
-        <li class="<?= is_active('manajemen_presensi'); ?>">
+        <!-- PERBAIKAN DI SINI -->
+        <li class="<?= is_active('data_presensi.php') ? 'active' : ''; ?>">
             <a href="<?= $base_url ?>manajemen_presensi/data_presensi.php"><i class="fa-solid fa-clipboard-user"></i> Data Presensi</a>
         </li>
-        <li class="<?= is_active('rekap_laporan.php'); ?>">
+        <li class="<?= is_active('rekap_laporan.php') ? 'active' : ''; ?>">
             <a href="<?= $base_url ?>manajemen_presensi/rekap_laporan.php"><i class="fa-solid fa-file-invoice"></i> Rekap Laporan</a>
         </li>
+        <!-- AKHIR PERBAIKAN -->
 
         <li class="menu-header">Pengajuan</li>
-        <li class="<?= is_active('data_cuti.php'); ?>">
-            <a href="<?= $base_url ?>pengajuan/data_cuti.php"><i class="fa-solid fa-calendar-alt"></i> Data Cuti</a>
+        <li class="<?= is_active('data_pengajuan.php'); ?>">
+            <a href="<?= $base_url ?>pengajuan/data_pengajuan.php"><i class="fa-solid fa-calendar-alt"></i> Data Pengajuan</a>
         </li>
-        <li class="<?= is_active('data_lembur.php'); ?>">
-            <a href="<?= $base_url ?>pengajuan/data_lembur.php"><i class="fa-solid fa-business-time"></i> Data Lembur</a>
-        </li>
+        <!--  -->
 
         <li class="menu-header">Pengaturan</li>
         <li class="<?= is_active('jam_kerja.php'); ?>">

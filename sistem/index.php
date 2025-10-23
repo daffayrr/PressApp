@@ -1,15 +1,18 @@
 <?php
-// Memulai session di paling atas file
+// Memulai sesi di paling atas file
 session_start();
 
-// Jika user sudah login, langsung redirect ke dashboard
+// --- PERBAIKAN 1: Path redirect untuk user yang sudah login ---
+// Jika user sudah login, arahkan ke dashboard.php di folder yang sama.
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header("Location: dashboard.php");
     exit;
 }
 
 // Memasukkan file konfigurasi database
-require_once '../config/database.php';
+// Path ini mengasumsikan 'config' berada satu level di atas 'sistem', 
+// jika sejajar, gunakan 'config/database.php'
+require_once __DIR__ . '/../config/database.php';
 
 // Variabel untuk menyimpan pesan error
 $error_message = '';
@@ -57,7 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $_SESSION['admin_username'] = $db_username;
                                 $_SESSION['admin_nama'] = $nama_lengkap;
 
-                                // Redirect ke halaman dashboard
+                                // --- PERBAIKAN 2: Path redirect setelah login sukses ---
+                                // Arahkan ke dashboard.php di folder yang sama.
                                 header("Location: dashboard.php");
                                 exit;
                             } else {
@@ -113,10 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
         
         <!-- Kolom Kiri: Informasi & Branding -->
-        <div class="w-full md:w-1/2 p-8 sm:p-12 text-white bg-blue-400 flex flex-col justify-center items-center md:items-start text-center md:text-left">
+        <div class="w-full md:w-1/2 p-8 sm:p-12 text-white bg-blue-500 flex flex-col justify-center items-center md:items-start text-center md:text-left">
             <div class="flex items-center justify-center md:justify-start mb-6">
                 <!-- Ganti dengan logo dinas Anda -->
-                <img src="../assets/images/logo.png" class="text-white text-2xl font-bold"></img>
+                <img src="../assets/images/logo.png" class="h-12"> <!-- Contoh path logo -->
             </div>
             <p class="text-lg font-medium mb-2">Selamat Datang di Portal Administrator</p>
             <p class="text-blue-100 leading-relaxed">Silakan masuk untuk mengelola data kepegawaian, memantau kehadiran, dan mengakses laporan presensi.</p>

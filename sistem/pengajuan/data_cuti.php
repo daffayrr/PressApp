@@ -1,16 +1,14 @@
 <?php
-// Menggunakan path yang benar untuk file di dalam sub-folder
-require_once __DIR__ . '/../../config/database.php';
-$page_title = "Data Pengajuan Cuti";
-require_once '../template/header.php';
+// 1. Panggil file konfigurasi dan header
+require_once '../../config/database.php';
+$pageTitle = "Data Pengajuan Cuti";
+require_once __DIR__ . '/../template/header.php';
 
+// 2. Jalankan logika database
 $conn = connect_db();
+$filter_status = $_GET['status'] ?? 'semua';
 
-// Logika untuk filter status
-$filter_status = $_GET['status'] ?? 'semua'; // Default ke 'semua'
-
-// Query untuk mengambil data pengajuan cuti
-$sql = "SELECT p.id, p.tanggal_mulai, p.tanggal_selesai, p.keterangan, p.status_pengajuan, k.nama_lengkap
+$sql = "SELECT p.id, p.keterangan, p.bukti, p.status_pengajuan, k.nama_lengkap, k.jabatan, k.role
         FROM pengajuan p
         JOIN karyawan k ON p.id_karyawan = k.id
         WHERE p.tipe_pengajuan = 'cuti'";
@@ -26,93 +24,91 @@ if ($filter_status !== 'semua') {
 }
 $stmt->execute();
 $result = $stmt->get_result();
+
+// 3. Panggil sidebar
+require_once __DIR__ . '/../template/sidebar.php';
 ?>
 
-<!-- Area Konten Utama -->
-<div class="flex h-screen bg-gray-100">
-    <?php require_once '../template/sidebar.php'; ?>
+<!-- KONTEN UTAMA HALAMAN DIMULAI DI SINI -->
+<main class="main-content">
+    <div class="content-panel">
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: #0d6efd; margin-bottom: 0.5rem;">Dashboard - Data Pengajuan Cuti</h1>
+        <hr style="margin-bottom: 1.5rem;">
 
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="flex justify-between items-center p-4 bg-white border-b border-gray-200 shadow-sm">
-            <h1 class="text-xl font-semibold text-gray-700"><?php echo htmlspecialchars($page_title); ?></h1>
-        </header>
-
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-            <div class="container mx-auto">
-                
-                <?php if (isset($_SESSION['notification'])): ?>
-                    <div class="mb-4 p-4 text-sm rounded-lg <?php echo $_SESSION['notification']['type'] === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>" role="alert">
-                        <?php echo htmlspecialchars($_SESSION['notification']['message']); ?>
-                    </div>
-                    <?php unset($_SESSION['notification']); ?>
-                <?php endif; ?>
-
-                <!-- Form Filter Status -->
-                <div class="bg-white p-4 rounded-xl shadow-md mb-6">
-                    <form action="data_cuti.php" method="GET" class="flex items-center space-x-4">
-                        <div>
-                            <label for="status" class="text-sm font-medium text-gray-700">Filter Status:</label>
-                            <select id="status" name="status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md" onchange="this.form.submit()">
-                                <option value="semua" <?php echo ($filter_status == 'semua') ? 'selected' : ''; ?>>Semua</option>
-                                <option value="menunggu" <?php echo ($filter_status == 'menunggu') ? 'selected' : ''; ?>>Menunggu</option>
-                                <option value="disetujui" <?php echo ($filter_status == 'disetujui') ? 'selected' : ''; ?>>Disetujui</option>
-                                <option value="ditolak" <?php echo ($filter_status == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
-                            </select>
-                        </div>
-                    </form>
+        <!-- Form Filter Status -->
+        <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #dee2e6;">
+            <form action="data_cuti.php" method="GET" style="display: flex; align-items: center; gap: 1rem;">
+                <div>
+                    <label for="status" style="font-size: 0.875rem; font-weight: 500; color: #495057;">Filter Status:</label>
+                    <select id="status" name="status" onchange="this.form.submit()" style="margin-top: 0.25rem; border: 1px solid #ced4da; border-radius: 4px; padding: 0.5rem;">
+                        <option value="semua" <?php echo ($filter_status == 'semua') ? 'selected' : ''; ?>>Semua</option>
+                        <option value="menunggu" <?php echo ($filter_status == 'menunggu') ? 'selected' : ''; ?>>Menunggu</option>
+                        <option value="disetujui" <?php echo ($filter_status == 'disetujui') ? 'selected' : ''; ?>>Disetujui</option>
+                        <option value="ditolak" <?php echo ($filter_status == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
+                    </select>
                 </div>
+            </form>
+        </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">Nama Karyawan</th>
-                                    <th scope="col" class="px-6 py-3">Tanggal Cuti</th>
-                                    <th scope="col" class="px-6 py-3">Keterangan</th>
-                                    <th scope="col" class="px-6 py-3">Status</th>
-                                    <th scope="col" class="px-6 py-3">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($result->num_rows > 0): ?>
-                                    <?php while($row = $result->fetch_assoc()): ?>
-                                    <tr class="bg-white border-b hover:bg-gray-50">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><?php echo htmlspecialchars($row['nama_lengkap']); ?></th>
-                                        <td class="px-6 py-4"><?php echo date('d M Y', strtotime($row['tanggal_mulai'])) . ' - ' . date('d M Y', strtotime($row['tanggal_selesai'])); ?></td>
-                                        <td class="px-6 py-4"><?php echo htmlspecialchars($row['keterangan']); ?></td>
-                                        <td class="px-6 py-4">
-                                            <?php
-                                                $status_class = 'bg-yellow-100 text-yellow-800';
-                                                if ($row['status_pengajuan'] == 'disetujui') $status_class = 'bg-green-100 text-green-800';
-                                                if ($row['status_pengajuan'] == 'ditolak') $status_class = 'bg-red-100 text-red-800';
-                                            ?>
-                                            <span class="px-2 py-1 font-semibold leading-tight rounded-full <?php echo $status_class; ?>">
-                                                <?php echo ucfirst(htmlspecialchars($row['status_pengajuan'])); ?>
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <?php if ($row['status_pengajuan'] == 'menunggu'): ?>
-                                                <a href="proses.php?action=setujui&id=<?php echo $row['id']; ?>" class="font-medium text-green-600 hover:underline mr-3" onclick="return confirm('Setujui pengajuan ini?');">Setujui</a>
-                                                <a href="proses.php?action=tolak&id=<?php echo $row['id']; ?>" class="font-medium text-red-600 hover:underline" onclick="return confirm('Tolak pengajuan ini?');">Tolak</a>
-                                            <?php else: echo '-'; endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                <?php else: ?>
-                                    <tr class="bg-white border-b"><td colspan="5" class="px-6 py-4 text-center text-gray-500">Tidak ada data pengajuan cuti.</td></tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
+        <!-- TABEL HTML SEDERHANA -->
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead style="background-color: #343a40; color: white;">
+                    <tr>
+                        <th style="padding: 12px 15px;">No</th>
+                        <th style="padding: 12px 15px;">Nama Lengkap</th>
+                        <th style="padding: 12px 15px;">Jabatan</th>
+                        <th style="padding: 12px 15px;">Role</th>
+                        <th style="padding: 12px 15px;">Keterangan</th>
+                        <th style="padding: 12px 15px; text-align: center;">Bukti</th>
+                        <th style="padding: 12px 15px;">Status</th>
+                        <th style="padding: 12px 15px; text-align: center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($result->num_rows > 0): $no = 1; ?>
+                        <?php while($row = $result->fetch_assoc()): ?>
+                        <tr style="border-bottom: 1px solid #dee2e6;">
+                            <td style="padding: 12px 15px;"><?php echo $no++; ?></td>
+                            <td style="padding: 12px 15px; font-weight: 500;"><?php echo htmlspecialchars($row['nama_lengkap']); ?></td>
+                            <td style="padding: 12px 15px;"><?php echo htmlspecialchars($row['jabatan']); ?></td>
+                            <td style="padding: 12px 15px;"><?php echo ucfirst(htmlspecialchars($row['role'])); ?></td>
+                            <td style="padding: 12px 15px;"><?php echo htmlspecialchars($row['keterangan']); ?></td>
+                            <td style="padding: 12px 15px; text-align: center;">
+                                <?php if (!empty($row['bukti'])): ?>
+                                    <!-- Asumsi file bukti disimpan di folder assets/bukti_cuti/ -->
+                                    <a href="../assets/bukti_cuti/<?php echo htmlspecialchars($row['bukti']); ?>" target="_blank" style="color: #0d6efd; text-decoration: underline;">Lihat</a>
+                                <?php else: echo '-'; endif; ?>
+                            </td>
+                            <td style="padding: 12px 15px;">
+                                <?php
+                                    $status_class = 'background-color: #fff3cd; color: #664d03;'; // Menunggu
+                                    if ($row['status_pengajuan'] == 'disetujui') $status_class = 'background-color: #d1e7dd; color: #0f5132;';
+                                    if ($row['status_pengajuan'] == 'ditolak') $status_class = 'background-color: #f8d7da; color: #842029;';
+                                ?>
+                                <span style="padding: 4px 8px; font-size: 0.8rem; font-weight: 600; border-radius: 1rem; <?= $status_class; ?>">
+                                    <?php echo ucfirst(htmlspecialchars($row['status_pengajuan'])); ?>
+                                </span>
+                            </td>
+                            <td style="padding: 12px 15px; text-align: center;">
+                                <?php if ($row['status_pengajuan'] == 'menunggu'): ?>
+                                    <a href="proses.php?action=approve&id=<?php echo $row['id']; ?>" style="color: #198754; text-decoration: none; margin-right: 10px;" onclick="return confirm('Approve pengajuan ini?');">Approve</a>
+                                    <a href="proses.php?action=reject&id=<?php echo $row['id']; ?>" style="color: #dc3545; text-decoration: none;" onclick="return confirm('Reject pengajuan ini?');">Reject</a>
+                                <?php else: echo '-'; endif; ?>
+                            </td>
+                        </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr><td colspan="8" style="padding: 12px 15px; text-align: center; color: #6c757d;">Tidak ada data pengajuan cuti.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</main>
 
 <?php
 $stmt->close();
 $conn->close();
-require_once '../template/footer.php';
+require_once __DIR__ . '/../template/footer.php';
 ?>
