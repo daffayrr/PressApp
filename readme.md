@@ -78,8 +78,8 @@ Portal manajemen terpusat dengan desain profesional untuk mengelola seluruh aspe
 
 1.  **Clone Repository**:
     ```bash
-    git clone [https://github.com/USERNAME_ANDA/NAMA_REPO_ANDA.git](https://github.com/USERNAME_ANDA/NAMA_REPO_ANDA.git) pressapp
-    cd pressapp
+    git clone https://github.com/daffayrr/PressApp.git
+    cd PressApp
     ```
 2.  **Web Server**: Pastikan Anda memiliki web server lokal yang mendukung PHP 8.x dan MySQL 8.x (misalnya XAMPP, WAMP, Laragon, atau setup manual di IIS/Apache).
 
@@ -164,3 +164,4 @@ pressapp/
 │   └── bukti/                    (Penyimpanan file bukti pengajuan)
 └── README.md                     (File ini)
 └── register_sementara.php        (Skrip inisialisasi data)
+
