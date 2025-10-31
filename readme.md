@@ -14,51 +14,51 @@
 Portal ini dirancang dengan pendekatan *mobile-first* untuk pengalaman pengguna yang optimal di ponsel.
 * **Login Karyawan**: Sistem login terpisah untuk karyawan.
 * **Dashboard Presensi**:
-    * Menampilkan jam dan tanggal *real-time*.
-    * Tombol dinamis (**Check In**, **Check Out**, **Sudah Presensi**, **Waktu Habis**) berdasarkan status dan jam kerja.
-    * Secara otomatis meminta izin lokasi GPS dari browser saat presensi.
-    * Validasi jarak (radius) dari lokasi kantor yang ditentukan admin.
-    * Validasi jam kerja (termasuk penanganan terlambat dan auto-checkout).
-    * Notifikasi modal interaktif (Sukses, Gagal, Izin Ditolak, Konfirmasi Terlambat).
+  * Menampilkan jam dan tanggal *real-time*.
+  * Tombol dinamis (**Check In**, **Check Out**, **Sudah Presensi**) berdasarkan status dan jam kerja.
+  * Secara otomatis meminta izin lokasi GPS dari browser saat presensi.
+  * Validasi jarak (radius) dari lokasi kantor yang ditentukan admin.
+  * Validasi jam kerja (termasuk penanganan terlambat dan auto-checkout).
+  * Notifikasi modal interaktif (Sukses, Gagal, Izin Ditolak, Konfirmasi Terlambat).
 * **Riwayat Presensi**:
-    * Menampilkan daftar riwayat check-in dan check-out pribadi.
-    * Menampilkan catatan khusus (mis: "Terlambat 15m 10d", "Auto Checkout").
+  * Menampilkan daftar riwayat check-in dan check-out pribadi.
+  * Menampilkan catatan khusus (mis: "Terlambat 15m 10d", "Auto Checkout").
 * **Pengajuan Izin**:
-    * Formulir untuk mengajukan **Izin Tidak Masuk** atau **Izin Pulang Awal**.
-    * Fitur **upload file bukti** (misalnya surat dokter).
-    * Melihat riwayat dan status pengajuan (Menunggu, Disetujui, Ditolak).
-    * Tombol "Perbarui Status" untuk me-refresh data.
+  * Formulir untuk mengajukan **Izin Tidak Masuk** atau **Izin Pulang Awal**.
+  * Fitur **upload file bukti** (misalnya surat dokter).
+  * Melihat riwayat dan status pengajuan (Menunggu, Disetujui, Ditolak).
+  * Tombol "Perbarui Status" untuk me-refresh data.
 * **Profil Karyawan**: Melihat data diri dan mengubah password.
 
 ### Panel Administrasi (`/sistem`)
 Portal manajemen terpusat dengan desain profesional untuk mengelola seluruh aspek sistem.
-* **Login Admin**: Sistem login terpisah khusus untuk *role* 'administrator'.
+* **Login Admin**: Sistem login terpisah khusus untuk *role* 'administrator' dan dilindungi oleh Sesi PHP.
 * **Dashboard Admin**: Menampilkan statistik ringkas (Total Karyawan, Hadir Hari Ini, Terlambat, Pengajuan Menunggu).
 * **Manajemen Karyawan**:
-    * Menampilkan daftar semua karyawan (Staff & Magang) dalam tabel interaktif.
-    * Fitur **pencarian** *real-time* di semua kolom.
-    * **Paginasi** tabel (Previous/Next).
-    * Fungsionalitas **CRUD** (Tambah, Edit, Hapus) data karyawan.
-    * Notifikasi *toast* (SweetAlert2) untuk setiap aksi (Berhasil Ditambah, Dihapus, dll.).
+  * Menampilkan daftar semua karyawan (Staff & Magang) dalam tabel interaktif.
+  * Fitur **pencarian *real-time*** di bagian atas tabel.
+  * **Paginasi** tabel (Previous/Next) yang dikelola oleh JavaScript.
+  * Fungsionalitas **CRUD** (Tambah, Edit, Hapus) data karyawan.
+  * Notifikasi *toast* (SweetAlert2) yang hilang otomatis untuk setiap aksi.
 * **Manajemen Presensi**:
-    * Menampilkan rekap presensi harian dengan **filter tanggal**.
-    * Tabel menampilkan **Jam Masuk**, **Jam Pulang**, **Role**, **Detail Keterlambatan** (jam, menit, detik), dan **Catatan**.
-    * Link ke **Google Maps** untuk verifikasi lokasi presensi.
-    * Fitur **Cetak Laporan Harian (PDF)** menggunakan FPDF, dengan format yang identik dengan tabel web.
-    * Tombol Reset Presensi Harian.
+  * Menampilkan rekap presensi harian dengan **filter tanggal**.
+  * Tabel menampilkan **Jam Masuk**, **Jam Pulang**, **Role**, **Detail Keterlambatan** (jam, menit, detik), dan **Catatan**.
+  * Link ke **Google Maps** untuk verifikasi lokasi presensi.
+  * Fitur **Cetak Laporan Harian (PDF)** menggunakan FPDF, dengan format yang identik dengan tabel web.
+  * Tombol Reset Presensi Harian.
 * **Rekap Laporan Total**:
-    * Menampilkan rekapitulasi total per karyawan dalam rentang tanggal tertentu.
-    * Kolom: **Nama**, **Username**, **Jumlah Masuk**, **Jumlah Terlambat**, **Jumlah Cuti**, **Jumlah Lembur**.
-    * Fitur **Cetak Laporan Rekap (PDF)**.
+  * Menampilkan rekapitulasi total per karyawan dalam rentang tanggal tertentu.
+  * Kolom: **Nama**, **Username**, **Jumlah Masuk**, **Jumlah Terlambat**, **Jumlah Cuti**, **Jumlah Lembur**.
+  * Fitur **Cetak Laporan Rekap (PDF)**.
 * **Manajemen Pengajuan**:
-    * Melihat semua pengajuan (Cuti, Lembur, Izin, dll.) dalam satu tabel.
-    * **Filter** berdasarkan Tipe Pengajuan atau Status.
-    * Melihat detail pengajuan, termasuk link untuk melihat/mengunduh **file bukti**.
-    * Tombol aksi **Approve** dan **Reject**.
+  * Melihat semua pengajuan (Cuti, Lembur, Izin, dll.) dalam satu tabel.
+  * **Filter** berdasarkan Tipe Pengajuan atau Status.
+  * Melihat detail pengajuan, termasuk link untuk melihat/mengunduh **file bukti**.
+  * Tombol aksi **Approve** dan **Reject**.
 * **Pengaturan**:
-    * **Jam Kerja**: Form untuk mengatur jam masuk, jam pulang, dan toleransi keterlambatan.
-    * **Lokasi Kantor**: Mengatur titik koordinat kantor pusat dan radius presensi menggunakan **peta interaktif (Leaflet.js)**.
-    * **Manajemen Admin**: Halaman CRUD terpisah untuk mengelola akun administrator.
+  * **Jam Kerja**: Form untuk mengatur jam masuk, jam pulang, dan toleransi keterlambatan.
+  * **Lokasi Kantor**: Mengatur titik koordinat kantor pusat dan radius presensi menggunakan **peta interaktif (Leaflet.js)**.
+  * **Manajemen Admin**: Halaman CRUD terpisah untuk mengelola akun administrator.
 * **Keamanan**: Semua halaman admin dan file proses dilindungi oleh pengecekan Sesi (`$_SESSION`).
 
 ## Teknologi yang Digunakan
@@ -71,7 +71,7 @@ Portal manajemen terpusat dengan desain profesional untuk mengelola seluruh aspe
     * SweetAlert2 - Untuk notifikasi modal dan *toast* yang modern.
     * Leaflet.js - Untuk peta interaktif di pengaturan lokasi.
 * **Laporan PDF**: FPDF Library (Versi 1.8x)
-* **Desain Admin**: Tampilan profesional kustom (terinspirasi dari Kendo UI) menggunakan CSS murni.
+* **Desain Admin**: Tampilan profesional kustom menggunakan CSS murni.
 * **Desain Karyawan**: Tampilan *mobile-first* kustom menggunakan Tailwind CSS (via CDN).
 
 ## Instalasi & Setup Lokal
@@ -113,3 +113,54 @@ Portal manajemen terpusat dengan desain profesional untuk mengelola seluruh aspe
     * Password: `magang123`
 
 ## Struktur Folder Utama
+
+Berikut adalah struktur folder utama dari proyek PressApp:
+
+```text
+pressapp/
+├── config/
+│   └── database.php
+├── karyawan/
+│   ├── index.php                 (Login Karyawan)
+│   ├── dashboard.php             (Halaman Presensi Utama)
+│   ├── riwayat.php               (Riwayat Presensi Karyawan)
+│   ├── pengajuan.php             (Form & Riwayat Pengajuan)
+│   ├── profil.php                (Profil Karyawan)
+│   ├── proses_presensi.php       (Backend Presensi)
+│   └── proses_pengajuan.php      (Backend Pengajuan Karyawan)
+├── sistem/
+│   ├── index.php                 (Login Admin)
+│   ├── dashboard.php             (Dashboard Admin)
+│   ├── logout.php
+│   ├── manajemen_karyawan/
+│   │   ├── data_karyawan.php
+│   │   ├── tambah_karyawan.php
+│   │   ├── edit_karyawan.php
+│   │   └── proses.php
+│   ├── manajemen_presensi/
+│   │   ├── data_presensi.php
+│   │   ├── rekap_laporan.php
+│   │   ├── cetak_laporan.php
+│   │   ├── cetak_rekap.php
+│   │   └── proses.php
+│   ├── pengajuan/
+│   │   ├── data_pengajuan.php
+│   │   └── proses.php
+│   ├── pengaturan/
+│   │   ├── jam_kerja.php
+│   │   ├── lokasi_kantor.php
+│   │   ├── profil_admin.php
+│   │   ├── tambah_admin.php
+│   │   ├── edit_admin.php
+│   │   └── proses_admin.php
+│   ├── template/
+│   │   ├── header.php
+│   │   ├── sidebar.php
+│   │   └── footer.php
+│   └── lib/
+│       ├── fpdf.php              (Library PDF)
+│       └── font/                 (Font untuk FPDF)
+├── uploads/
+│   └── bukti/                    (Penyimpanan file bukti pengajuan)
+└── README.md                     (File ini)
+└── register_sementara.php        (Skrip inisialisasi data)
